@@ -9,9 +9,12 @@ async function handleGenerateNewShortURL(req,res){
         shortId: shortId,
         redirectURL: body.url,
         visitHistory: [],
+        createdBy: req.user._id,
     });
 
-    return res.json({ id: shortId });
+    return res.render('home',{
+        id: shortId
+    });
 }
 
 async function handleRedirectToOriginalURL(req,res){
@@ -40,8 +43,17 @@ async function handleGetAnalytics(req,res){
         analytics: result.visitHistory,
     });
 }
+
+async function handleGetAllURL(req,res){
+    if(!req.user) return res.redirect("/login");
+    const allUrls = await URL.find({createdBy: req.user._id});
+    return res.render('home', {
+        urls: allUrls,
+    });
+}
 module.exports = {
     handleGenerateNewShortURL,
     handleRedirectToOriginalURL,
-    handleGetAnalytics
+    handleGetAnalytics,
+    handleGetAllURL
 };

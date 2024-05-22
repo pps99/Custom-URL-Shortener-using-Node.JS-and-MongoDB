@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const moongose = require('mongoose');
 
 const urlSchema = new moongose.Schema({  
@@ -15,6 +16,11 @@ const urlSchema = new moongose.Schema({
       timestamp: {type: Number},
     }
   ],
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users',
+  }
+
 },{timestamps: true});
 
 const URL = moongose.model('url',urlSchema);
